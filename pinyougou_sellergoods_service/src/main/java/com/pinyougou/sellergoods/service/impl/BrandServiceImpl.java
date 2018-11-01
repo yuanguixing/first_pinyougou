@@ -23,8 +23,6 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public List<TbBrand> findAll() {
-
-
         return brandMapper.selectByExample(null);
     }
 
