@@ -50,7 +50,8 @@ app.controller("specificationController", function ($scope, $controller, specifi
         })
     }
 
-    //$scope.entity = {specificationOptions: []};
+    //初始化选项
+    $scope.entity = {specification:{},specificationOptions: []};
     $scope.addRow = function () {
         $scope.entity.specificationOptions.push({});
     }
