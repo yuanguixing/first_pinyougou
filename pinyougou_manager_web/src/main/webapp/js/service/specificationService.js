@@ -22,5 +22,9 @@ app.service("specificationService", function ($http) {
     this.dele = function (ids) {
         return $http.get("../specification/dele.do?ids=" + ids);
     };
+    
+    this.SelectSpecList =function () {
+        return $http.get("../specification/SelectSpecList.do");
+    }
 
 });

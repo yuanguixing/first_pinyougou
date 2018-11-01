@@ -26,4 +26,8 @@ app.service("brandService",function ($http) {
     this.dele= function (ids) {
         return $http.get("../brand/delete.do?ids=" + ids);
     }
+
+    this.findSelectBrandList = function () {
+        return $http.get("../brand/findSelectBrandList.do");
+    }
 });

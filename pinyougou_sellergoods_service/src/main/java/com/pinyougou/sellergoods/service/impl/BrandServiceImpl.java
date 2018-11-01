@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -69,5 +70,10 @@ public class BrandServiceImpl implements BrandService {
         for (Long id : ids) {
             brandMapper.deleteByPrimaryKey(id);
         }
+    }
+
+    @Override
+    public List<Map> findSelectBrandList() {
+        return brandMapper.findSelectBrandList();
     }
 }

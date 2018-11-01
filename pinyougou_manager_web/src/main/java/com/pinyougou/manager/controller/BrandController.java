@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/brand")
@@ -31,7 +32,7 @@ public class BrandController {
      */
     @RequestMapping("/search")
     public PageResult search(@RequestBody TbBrand brand, Integer pageNum, Integer pageSize) {
-        return brandService.search(brand,pageNum, pageSize);
+        return brandService.search(brand, pageNum, pageSize);
     }
 
     /**
@@ -79,5 +80,14 @@ public class BrandController {
             e.printStackTrace();
             return new Result(false, "删除失败");
         }
+    }
+
+
+    /**
+     *  查询模板关联的品牌下拉列表
+     */
+    @RequestMapping("/findSelectBrandList")
+    public List<Map> findSelectBrandList() {
+        return brandService.findSelectBrandList();
     }
 }

@@ -4,6 +4,9 @@ import com.pinyougou.pojo.TbSpecification;
 import entity.PageResult;
 import groupEntity.Specification;
 
+import java.util.List;
+import java.util.Map;
+
 public interface SpecificationService {
 
     /**
@@ -21,4 +24,6 @@ public interface SpecificationService {
     Specification findOne(Long id);
 
     void delete(Long[] ids);
+
+    List<Map> selectSpecList();
 }

@@ -5,6 +5,7 @@ import com.pinyougou.pojo.TbBrand;
 import entity.PageResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 品牌服务层接口
@@ -28,4 +29,6 @@ public interface BrandService {
     void update(TbBrand brand);
 
     void delete(Long[] ids);
+
+    List<Map> findSelectBrandList();
 }
