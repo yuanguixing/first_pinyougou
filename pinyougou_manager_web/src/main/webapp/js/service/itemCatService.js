@@ -28,5 +28,19 @@ app.service('itemCatService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../itemCat/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+
+	//基于父id 查询子分类
+	this.findByParentId = function (parentId) {
+        return $http.get("../itemCat/findByParentId.do?parentId=" + parentId);
+    }
+    //删除前查询
+    this.findByType = function (ids) {
+        return $http.get("../itemCat/findByType.do?ids=" + ids);
+    }
+    //删除子类
+    this.deleParentId=function(ids){
+        return $http.get('../itemCat/deleParentId.do?ids='+ids);
+    }
+
 });
