@@ -1,5 +1,5 @@
  //控制层 
-app.controller('sellerController' ,function($scope,$controller   ,sellerService){	
+app.controller('sellerController' ,function($scope, $controller, sellerService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -10,7 +10,7 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 				$scope.list=response;
 			}			
 		);
-	}    
+	};
 	
 	//分页
 	$scope.findPage=function(page,rows){			
@@ -50,6 +50,8 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 			}		
 		);				
 	}
+
+
 	
 	 
 	//批量删除 
@@ -75,5 +77,17 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 			}			
 		);
 	}
+    //商家审核操作
+    $scope.updateStatus=function(status){
+        sellerService.updateStatus($scope.entity.sellerId,status).success(function(response){
+                if(response.success){
+                    //审核成功
+                    $scope.reloadList();//重新加载
+                }else{
+                    alert(response.message);
+                }
+            }
+        );
+    }
     
 });	
