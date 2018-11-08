@@ -2,7 +2,7 @@ package com.pinyougou.sellergoods.service;
 
 import com.pinyougou.pojo.TbSpecification;
 import entity.PageResult;
-import groupEntity.Specification;
+import groupentity.Specification;
 
 import java.util.List;
 import java.util.Map;

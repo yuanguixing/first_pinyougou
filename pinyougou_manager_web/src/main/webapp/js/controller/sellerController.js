@@ -89,5 +89,8 @@ app.controller('sellerController' ,function($scope, $controller, sellerService){
             }
         );
     }
+    //以下是商家管理页面的方法
+
+
     
 });	

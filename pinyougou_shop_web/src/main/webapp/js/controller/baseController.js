@@ -48,6 +48,21 @@ app.controller("baseController", function ($scope) {
             }
         }
         return value;
+    };
+    //根据规格的属性名称判断该规格对象是否存在规格列表中 (存在于json格式的对象中)
+    /* [{"attributeName":"网络制式","attributeValue":["移动3G","移动4G","联通3G"]},
+        {"attributeName":"屏幕尺寸","attributeValue":["5.5寸","6寸"]}] */
+    //参数一: json格式的数组对象  参数二: 数组中对象的属性名 参数三:数组中对象的属性值
+    $scope.getObjectByName = function (list, key, value) {
+        for(var i = 0; i< list.length; i++) {
+            //基于对象属性值, 判断该对象是否存在
+            if (list[i][key] == value) {
+                return list[i];
+                break;
+            }
+        }
+        return null;
+
     }
 
 });

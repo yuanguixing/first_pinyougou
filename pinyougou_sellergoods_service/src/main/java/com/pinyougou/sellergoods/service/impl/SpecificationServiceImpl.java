@@ -11,7 +11,7 @@ import com.pinyougou.pojo.TbSpecificationOption;
 import com.pinyougou.pojo.TbSpecificationOptionExample;
 import entity.PageResult;
 import com.pinyougou.sellergoods.service.SpecificationService;
-import groupEntity.Specification;
+import groupentity.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 

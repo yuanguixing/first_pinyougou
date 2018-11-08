@@ -29,8 +29,8 @@ app.service('goodsService',function($http){
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
 	}
-	//商品审核
-	this.updateStatus = function (ids,status) {
-		return $http.get("../goods/updateStatus.do?ids="+ ids + "&status=" + status);
+	//商品上下架
+    this.updateIsMarketable=function(ids, isMarketable){
+        return $http.get('../goods/updateIsMarketable.do?ids='+ids +"&isMarketable="+ isMarketable);
     }
 });

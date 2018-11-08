@@ -5,7 +5,7 @@ import com.pinyougou.pojo.TbSpecification;
 import entity.PageResult;
 import com.pinyougou.sellergoods.service.SpecificationService;
 import entity.Result;
-import groupEntity.Specification;
+import groupentity.Specification;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

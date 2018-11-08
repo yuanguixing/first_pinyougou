@@ -1,4 +1,4 @@
-package groupEntity;
+package groupentity;
 
 import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.pojo.TbSpecificationOption;

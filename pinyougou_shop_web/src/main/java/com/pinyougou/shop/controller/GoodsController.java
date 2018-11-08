@@ -1,4 +1,4 @@
-package com.pinyougou.manager.controller;
+package com.pinyougou.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbGoods;
@@ -113,19 +113,26 @@ public class GoodsController {
 	 */
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
+		//注意 查询登陆商家的商品
+		String sellId = SecurityContextHolder.getContext().getAuthentication().getName();
+		goods.setSellerId(sellId);
 		return goodsService.findPage(goods, page, rows);		
 	}
-    /**
-     * 商品审核 批量审核
-     */
-    @RequestMapping("/updateStatus")
-    public Result updateStatus(Long [] ids,String status){
-        try {
-            goodsService.updateStatus(ids, status);
-            return new Result(true, "审核成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, "审核失败");
-        }
-    }
+	/**
+	 * 商品上下架操作 批量上下架
+	 */
+	@RequestMapping("/updateIsMarketable")
+	public Result updateIsMarketable(Long [] ids,String isMarketable){
+		try {
+			goodsService.updateIsMarketable(ids,isMarketable);
+			return new Result(true, "上下架成功");
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return new Result(false, e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "上下架失败");
+		}
+	}
+	
 }
