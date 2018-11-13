@@ -72,4 +72,5 @@ public class TbContent implements Serializable {
     public void setSortOrder(Integer sortOrder) {
         this.sortOrder = sortOrder;
     }
+
 }
