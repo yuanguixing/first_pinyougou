@@ -1,4 +1,4 @@
-app.controller('searchController', function ($scope, $controller, searchService) {
+app.controller('searchController', function ($scope, $controller, $location, searchService) {
 
     $controller('baseController', {$scope: $scope});
 
@@ -15,6 +15,16 @@ app.controller('searchController', function ($scope, $controller, searchService)
         pageNo:1,
         pageSize:60
     };
+
+    //获取门户网站传递的搜索关键字
+    var keywords = $location.search()["keywords"];
+    if(keywords != "undefined") {
+        //门户网站输入了关键字
+        $scope.searchMap.keywords= keywords;
+    }else {
+        $scope.searchMap.keywords="手机";
+    }
+
     //1.商品搜索功能 关键字
     $scope.search = function () {
 

@@ -22,7 +22,6 @@
             <artifactId>commons-fileupload</artifactId>
         </dependency>
 
-
         <!-- 缓存 -->
         <dependency>
             <groupId>redis.clients</groupId>
@@ -34,6 +33,8 @@
             <artifactId>spring-data-redis</artifactId>
             <version>1.7.2.RELEASE</version>
         </dependency>
+
+
 
     </dependencies>
 

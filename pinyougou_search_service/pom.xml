@@ -95,6 +95,11 @@
             <version>1.5.5.RELEASE</version>
         </dependency>
 
+        <!--activemq 消费者 搜索的服务-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+        </dependency>
     </dependencies>
 
 

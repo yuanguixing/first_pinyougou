@@ -248,7 +248,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
         })
     }
     //定义商品上下架状态的数组
-    $scope.isMarketable = ["上架","下架"];
+    $scope.isMarketable = ["下架","上架"];
 
     $scope.itemCatList= [];
 

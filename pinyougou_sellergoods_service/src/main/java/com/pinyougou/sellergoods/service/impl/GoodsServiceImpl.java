@@ -16,7 +16,14 @@ import com.pinyougou.pojo.TbGoodsExample.Criteria;
 import com.pinyougou.sellergoods.service.GoodsService;
 
 import entity.PageResult;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 
 /**
  * 服务实现层
@@ -39,6 +46,19 @@ public class GoodsServiceImpl implements GoodsService {
     private TbSellerMapper sellerMapper;//商家
     @Autowired
     private TbItemMapper itemMapper; //商品明细
+
+    @Autowired
+    private JmsTemplate jmsTemplate; //activemq
+    @Autowired
+    private Destination addItemSolrDestination; //消息的同步目的地
+    @Autowired
+    private Destination deleteItemSolrDestination; //删除目的地
+
+    @Autowired
+    private Destination addItemPageDestination; //同步生成静态页
+    @Autowired
+    private Destination deleItemPageDestination; //
+
 
     /**
      * 查询全部
@@ -73,7 +93,7 @@ public class GoodsServiceImpl implements GoodsService {
         goodsDesc.setGoodsId(tbGoods.getId());
         tbGoodsDescMapper.insert(goodsDesc);
 
-        if("1".equals(tbGoods.getIsEnableSpec())) {
+        if ("1".equals(tbGoods.getIsEnableSpec())) {
 
             //保存tb_item表
             List<TbItem> itemList = goods.getItemList();
@@ -93,7 +113,7 @@ public class GoodsServiceImpl implements GoodsService {
                 //保存商品
                 itemMapper.insert(item);
             }
-        }else {
+        } else {
             //保存tb_item表
             List<TbItem> itemList = goods.getItemList();
             for (TbItem item : itemList) {
@@ -241,10 +261,42 @@ public class GoodsServiceImpl implements GoodsService {
             TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
             //注意,审核通过的商品才能上下架
             if ("1".equals(tbGoods.getAuditStatus())) {
+
+                //上架
+                if ("1".equals(isMarketable)) {
+                    jmsTemplate.send(addItemSolrDestination, new MessageCreator() {
+                        @Override
+                        public Message createMessage(Session session) throws JMSException {
+                            return session.createTextMessage(id+"");
+                        }
+                    });
+                    jmsTemplate.send(addItemPageDestination, new MessageCreator() {
+                        @Override
+                        public Message createMessage(Session session) throws JMSException {
+                            return session.createTextMessage(id+"");
+                        }
+                    });
+                }
+
+                //下架
+                if ("0".equals(isMarketable)) {
+                    jmsTemplate.send(deleteItemSolrDestination, new MessageCreator() {
+                        @Override
+                        public Message createMessage(Session session) throws JMSException {
+                            return session.createTextMessage(id+"");
+                        }
+                    });
+                    jmsTemplate.send(deleItemPageDestination, new MessageCreator() {
+                        @Override
+                        public Message createMessage(Session session) throws JMSException {
+                            return session.createTextMessage(id+"");
+                        }
+                    });
+                }
                 tbGoods.setIsMarketable(isMarketable);
                 goodsMapper.updateByPrimaryKey(tbGoods);
-            }else {
-                throw  new RuntimeException("只有审核通过的商品才能上下架");
+            } else {
+                throw new RuntimeException("只有审核通过的商品才能上下架");
             }
         }
     }
