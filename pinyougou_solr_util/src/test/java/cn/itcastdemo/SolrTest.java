@@ -24,12 +24,12 @@ public class SolrTest {
 
     @Autowired
     private SolrUtil solrUtil;
+
     @Test
     public void test() {
         solrUtil.dataImport();
 
     }
-
 
 
     /**
@@ -163,9 +163,14 @@ public class SolrTest {
             System.out.println(item.getId() + " .. " + item.getBrand() + "  " + item.getTitle() + "  " + item.getSeller());
         }
     }
-@Test
-    public void Test() {
 
-}
+    @Test
+    public void Test() {
+        int total=0;
+        for(int i=0,j=5; total<3 ; ++i,--j ) {
+            total += (i+j);
+            System.out.println(total);
+        }
+    }
 
 }
