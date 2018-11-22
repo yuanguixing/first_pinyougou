@@ -137,5 +137,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: xalan:xalan:2.7.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: xalan:serializer:2.7.1" level="project" />
     <orderEntry type="module" module-name="pinyougou_order_interface" />
+    <orderEntry type="module" module-name="pinyougou_pay_interface" />
   </component>
 </module>

@@ -1,13 +1,14 @@
 package com.pinyougou.order.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.pinyougou.mapper.TbOrderItemMapper;
+import com.pinyougou.mapper.TbPayLogMapper;
 import com.pinyougou.order.service.OrderService;
-import com.pinyougou.pojo.TbOrderItem;
-import com.pinyougou.pojo.TbOrderItemExample;
+import com.pinyougou.pojo.*;
 import com.pinyougou.upload.IdWorker;
 import entity.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.mapper.TbOrderMapper;
-import com.pinyougou.pojo.TbOrder;
-import com.pinyougou.pojo.TbOrderExample;
 import com.pinyougou.pojo.TbOrderExample.Criteria;
 
 import entity.PageResult;
@@ -38,6 +37,8 @@ public class OrderServiceImpl implements OrderService {
     private IdWorker idWorker;
     @Autowired
     private TbOrderItemMapper orderItemMapper;
+    @Autowired
+    private TbPayLogMapper payLogMapper;
 
     /**
      * 查询全部
@@ -64,10 +65,16 @@ public class OrderServiceImpl implements OrderService {
     public void add(TbOrder order) {
         //基于用户名获取购物车数据
         List<Cart> cartList = (List<Cart>) redisTemplate.boundValueOps(order.getUserId()).get();
+        //支付总金额
+        double totalPayment = 0.00;
+        //定义支付关联的订单集合
+        List<String> ids = new ArrayList<>();
+
         for (Cart cart : cartList) {
             //后台组装数据
             TbOrder tbOrder = new TbOrder();
             long orderId = idWorker.nextId();
+            ids.add(orderId+"");
             tbOrder.setOrderId(orderId);
             tbOrder.setStatus("1");
             tbOrder.setCreateTime(new Date());
@@ -91,9 +98,28 @@ public class OrderServiceImpl implements OrderService {
                 payment += orderItem.getTotalFee().doubleValue();
                 orderItemMapper.insert(orderItem);
             }
+            //计算支付总金额
+            totalPayment += payment;
             tbOrder.setPayment(new BigDecimal(payment));
             orderMapper.insert(tbOrder);
         }
+
+        //如果支付方式是在线支付,需要记录一笔支付
+        if ("1".equals(order.getPaymentType())) {
+            TbPayLog payLog = new TbPayLog();
+            payLog.setOutTradeNo(idWorker.nextId()+"");
+            payLog.setCreateTime(new Date());
+            //payLog.setTotalFee(Long.parseLong(totalPayment*100+"")); 有bug 0.01 *100   1.0
+            payLog.setTotalFee((long)(totalPayment*100));
+            payLog.setUserId(order.getUserId());
+            payLog.setTradeState("1"); //1未支付
+            payLog.setOrderList(ids.toString().replace("[", "").replace("]", "").replace(" ", "")); //一笔支付关联的多个订单ID以逗号分隔
+            payLog.setPayType("1"); //微信支付
+            payLogMapper.insert(payLog);
+            //需要将支付日志保存一份到缓存中 基于用户将支付日志保存
+              redisTemplate.boundHashOps("payLog").put(order.getUserId(),payLog);
+        }
+
         //清除redis中该用户记录的购物车数据
         redisTemplate.delete(order.getUserId());
     }
